@@ -42,6 +42,6 @@ const productSchema = new Schema<IProduct>({
     required: false,
     default: null,
   },
-});
+}, { versionKey: false });
 
 export default mongoose.model<IProduct>('Product', productSchema);

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { faker } from '@faker-js/faker';
 import { Error as MongooseError } from 'mongoose';
-import { errorMessage400, errorMessage409, errorMessage500 } from '../constants/errors';
+import { errorMessage400 } from '../constants/errors';
 
 import Product from '../models/product';
 
@@ -14,25 +14,25 @@ const registerOrder = async (req: Request, res: Response, next: NextFunction) =>
     const product = await Product.findOne({ _id: item });
     if (product) {
       if (product.price === null) {
-        const error = new MongooseError(errorMessage400.PRODUCT_NULL);
-        return next(error);
+        const resultError = new MongooseError(errorMessage400.PRODUCT_NULL);
+        return next(resultError);
       }
       calculateTotal += (product.price);
     } else {
-      const error = new MongooseError(errorMessage400.PRODUCT_NOT_FOUND);
-      return next(error);
+      const resultError = new MongooseError(errorMessage400.PRODUCT_NOT_FOUND);
+      return next(resultError);
     }
     return calculateTotal;
   }))
     .then(() => {
       if (total !== calculateTotal) {
-        const error = new MongooseError(errorMessage400.ORDER_WRONG_TOTAL);
-        return next(error);
+        const resultError = new MongooseError(errorMessage400.ORDER_WRONG_TOTAL);
+        return next(resultError);
       } return res.status(200).send({ id, total: calculateTotal });
     })
     .catch(() => {
-      const error = new MongooseError(errorMessage400.ORDER_UNKNOWN_ERROR);
-      return next(error);
+      const resultError = new MongooseError(errorMessage400.ORDER_UNKNOWN_ERROR);
+      return next(resultError);
     });
 };
 
