@@ -19,7 +19,10 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
   return Product.create({
     title, image, category, description, price,
   })
-    .then((product) => res.send({ item: product }))
+    .then((product) => {
+      res.status(201);
+      res.send({ item: product });
+    })
     .catch((err) => {
       const resultError = new MongooseError(err.message);
       return next(resultError);
@@ -36,5 +39,8 @@ export const deleteProduct = async (req: Request, res: Response, next: NextFunct
   return Product.deleteOne(
     { _id: new ObjectId(id) },
   )
-    .then(() => res.send({ success: id }));
+    .then(() => {
+      res.status(200);
+      res.send({ success: id });
+    });
 };

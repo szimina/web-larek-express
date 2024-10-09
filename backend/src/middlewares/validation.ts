@@ -51,3 +51,8 @@ export const productBodyValidation = Joi.object().keys({
     }),
   price: Joi.number(),
 });
+
+export const idToDeleteValidation = {
+  id: Joi.string().hex().required()
+    .messages({ 'string.guid': 'Необходимо передавать hex строку' }),
+};

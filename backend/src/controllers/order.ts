@@ -14,6 +14,7 @@ const registerOrder = async (req: Request, res: Response, next: NextFunction) =>
     const product = await Product.findOne({ _id: item });
     if (product) {
       if (product.price === null) {
+        calculateTotal = 0;
         const resultError = new MongooseError(errorMessage400.PRODUCT_NULL);
         return next(resultError);
       }
@@ -28,7 +29,7 @@ const registerOrder = async (req: Request, res: Response, next: NextFunction) =>
       if (total !== calculateTotal) {
         const resultError = new MongooseError(errorMessage400.ORDER_WRONG_TOTAL);
         return next(resultError);
-      } return res.status(200).send({ id, total: calculateTotal });
+      } return res.status(201).send({ id, total: calculateTotal });
     })
     .catch(() => {
       const resultError = new MongooseError(errorMessage400.ORDER_UNKNOWN_ERROR);

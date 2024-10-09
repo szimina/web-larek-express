@@ -3,9 +3,10 @@ import path from 'path';
 import express from 'express';
 import mongoose from 'mongoose';
 import { errors } from 'celebrate';
-import routes from './routes/routes';
 import { errorLogger, requestLogger } from './middlewares/logger';
 import errorHandler from './middlewares/error';
+import productRouter from './routes/product';
+import orderRouter from './routes/order';
 
 const { PORT, DB_ADDRESS = 'mongodb://127.0.0.1:27017/weblarek' } = process.env;
 
@@ -16,7 +17,8 @@ app.use(express.json());
 app.use(errors());
 app.use(requestLogger);
 
-app.use(routes);
+app.use('/product', productRouter);
+app.use('/order', orderRouter);
 
 app.use(errorHandler);
 app.use(errorLogger);
